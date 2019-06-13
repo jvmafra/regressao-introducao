@@ -29,3 +29,32 @@ countyComplete %>%
   geom_point(alpha = 0.4, size = .5)
 ```
 
+```{r}
+mod <- lm(per_capita_income ~ bachelors, 
+          data = countyComplete)
+tidy(mod)
+glance(mod)
+```
+
+```{r}
+countyComplete %>% 
+  select(bachelors, per_capita_income) %>% 
+  add_predictions(model = mod) %>% # add o que o modelo estima p cada hs_grad
+  ggplot(mapping = aes(x = bachelors, y = per_capita_income)) + 
+  geom_point(alpha = 0.4, size = .1) + 
+  geom_line(aes(y = pred), colour = "red")
+```
+
+```{r}
+countyComplete %>% 
+  add_residuals(model = mod) %>% 
+  ggplot(aes(bachelors, resid)) + 
+  geom_point(alpha = .4, size = .5) + 
+  geom_hline(yintercept = 0, colour = "blue")
+```
+
+Regressão linear simples foi utilizada para analisar a associação entre a proporção de pessoas com ensino superior completo no condado (bachelors) e a renda per capita do mesmo (per_capita_income). Os resultados da regressão indicam que um modelo no formato per_capita_income = 494.7*bachelors + 13087.6 explica 62,79% da variância da variável de resposta (R2 = 0,6279). O aumento de 1 unidade de bachelors medida em porpoção de pessoas com ensino superior completo produz uma mudança de 494 em per_capita_income.
+
+
+
+
